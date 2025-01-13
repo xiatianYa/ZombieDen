@@ -96,10 +96,6 @@ const serverData = ref([
       {
         address: 'cs3.zombieden.cn:27052',
         serverData: null
-      },
-      {
-        address: 'cs2.zombieden.cn:27051',
-        serverData: null
       }
     ]
   },
@@ -186,40 +182,64 @@ const goHref = (url: string) => {
   window.open(url);
 };
 
-// 初始化
-const init = async () => {
-  serverData.value.forEach(async server => {
-    server.serverList.forEach(async serverItem => {
-      const data = await fetchGetServerInfo({ address: serverItem.address });
-      const map = mapData.value.find((item: any) => item.mapName === data.Map);
-      if (map) {
-        data.mapUrl = map.mapUrl;
-        data.mapLabel = map.mapLabel;
-        data.tag = JSON.parse(map.tag);
-        data.type = String(map.type);
-      }
-      serverItem.serverData = data;
-    });
-  });
-  setTimeout(() => {
-    loading.value = false;
-  }, 3000);
-};
-
-onMounted(async () => {
+// 初始化地图列表
+const initMap = async () => {
   // 获取地图列表
   const { data } = await fetchGetMapList();
   if (data) mapData.value = data;
-  // 初始化服务器数据
-  init();
+};
+
+// 初始化
+const init = async () => {
+  // 用于收集所有获取服务器信息的异步操作Promise
+  const allPromises: Promise<void>[] = [];
+
+  serverData.value.forEach(server => {
+    server.serverList.forEach(serverItem => {
+      // 为每个serverItem的信息获取操作创建Promise并添加到数组
+      allPromises.push(
+        (async () => {
+          const data = await fetchGetServerInfo({ address: serverItem.address });
+          if (!data) {
+            serverItem.serverData = null;
+          } else {
+            const map = mapData.value.find((item: any) => item.mapName === data.Map);
+            if (map) {
+              data.mapUrl = map.mapUrl;
+              data.mapLabel = map.mapLabel;
+              data.tag = JSON.parse(map.tag);
+              data.type = String(map.type);
+            }
+            serverItem.serverData = data;
+          }
+        })()
+      );
+    });
+  });
+
+  // 等待所有异步操作完成
+  await Promise.all(allPromises);
+  // 这里可以添加后续需要执行的逻辑，比如触发一个事件通知外部相关代码数据已准备好等
+  loading.value = false;
+};
+
+// 开启定时任务
+const startTimer = () => {
   // 开启定时任务 轮询服务器数据
   timer.value = setInterval(() => {
     init();
   }, 15000);
+};
+
+onMounted(async () => {
+  // 初始化服务器数据
+  await initMap();
+  init();
+  startTimer();
 });
 
 onUnmounted(() => {
-  clearInterval(timer.value);
+  if (timer.value) clearInterval(timer.value);
 });
 </script>
 
