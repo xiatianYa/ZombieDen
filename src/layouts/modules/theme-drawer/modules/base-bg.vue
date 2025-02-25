@@ -11,7 +11,10 @@ const themeStore = useThemeStore();
 
 const bgList = ref([
   'https://www.bluearchive.top/statics/2025/01/11/bg01_20250111122922A001.png',
-  'https://www.bluearchive.top/statics/2025/01/11/bg02_20250111123633A002.png'
+  'https://www.bluearchive.top/statics/2025/01/11/bg02_20250111123633A002.png',
+  'https://www.bluearchive.top/statics/2025/01/11/bg03.png',
+  'https://www.bluearchive.top/statics/2025/01/11/bg04.png',
+  'https://www.bluearchive.top/statics/2025/01/11/bg05.png'
 ]);
 </script>
 
@@ -24,7 +27,7 @@ const bgList = ref([
           <NImage
             v-for="(item, index) in bgList"
             :key="index"
-            class="mr-5px cursor-pointer"
+            class="mr-5px min-h-50px cursor-pointer"
             width="80"
             preview-disabled
             :src="item"

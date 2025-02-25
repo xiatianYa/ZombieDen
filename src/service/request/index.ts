@@ -183,18 +183,6 @@ export const baRequest = createRequest<App.Service.DemoResponse>(
       Object.assign(headers, { Authorization });
 
       return config;
-    },
-    onError(error) {
-      // when the request is fail, you can show error message
-
-      let message = error.message;
-
-      // show backend error message
-      if (error.code === BACKEND_ERROR_CODE) {
-        message = error.response?.data?.message || message;
-      }
-
-      window.$message?.error(message);
     }
   }
 );

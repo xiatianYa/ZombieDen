@@ -286,7 +286,9 @@ onMounted(() => {});
         <div class="flex-y-center">
           <SvgIcon icon="material-symbols:map-outline" class="mr-6px text-20px" />
           <NEllipsis :line-clamp="1">
-            {{ gameServer?.Players }}/{{ gameServer?.MaxPlayers }} | {{ gameServer?.mapLabel }}({{ gameServer?.Map }})
+            <div>
+              {{ gameServer?.Players }}/{{ gameServer?.MaxPlayers }} | {{ gameServer?.mapLabel }}({{ gameServer?.Map }})
+            </div>
           </NEllipsis>
         </div>
       </div>
@@ -332,9 +334,7 @@ onMounted(() => {});
         </div>
       </div>
       <div class="game-info-body p-10px">
-        <NSpace v-if="gamePlayerList.length === 0" align="center" justify="center" style="height: 100%">
-          暂无玩家
-        </NSpace>
+        <NSpace v-if="gamePlayerList.length === 0" align="center" justify="center" class="h-100%">暂无玩家</NSpace>
         <NButton
           v-for="(item, index) in gamePlayerList"
           :key="index"
@@ -477,7 +477,7 @@ onMounted(() => {});
 
 .game-info {
   width: 40%;
-  min-width: 375px;
+  min-width: 350px;
   height: 600px;
   position: absolute;
   left: 50%;
@@ -505,6 +505,7 @@ onMounted(() => {});
     .game-info-map-img {
       width: 100%;
       height: 100%;
+
       img {
         width: 100%;
         height: 100%;
