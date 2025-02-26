@@ -537,7 +537,7 @@ declare namespace App {
   /** Service namespace */
   namespace Service {
     /** Other baseURL key */
-    type OtherBaseURLKey = 'demo' | 'zed' | 'ba';
+    type OtherBaseURLKey = 'demo' | 'zed' | 'ba' | 'wanmei';
 
     interface ServiceConfigItem {
       /** The backend service base url */
@@ -588,6 +588,16 @@ declare namespace App {
       message: string;
       /** The backend service response data */
       result: T;
+    };
+
+    /** The wanmei backend service response data */
+    type WanmeiResponse<T = unknown> = {
+      /** The backend service response code */
+      code: string;
+      /** The backend service response message */
+      msg: string;
+      /** The backend service response data */
+      data: T;
     };
   }
 }

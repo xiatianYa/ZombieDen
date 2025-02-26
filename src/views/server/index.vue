@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { addColorAlpha, mixColor } from '@sa/color';
+import { onMounted, onUnmounted, ref } from 'vue';
 import type { DropdownOption } from 'naive-ui';
 import { useThemeStore } from '@/store/modules/theme';
 import { useAppStore } from '@/store/modules/app';
-import { fetchGetMapList, fetchGetServerInfo } from '@/service/api';
+import { fetchGetHotList, fetchGetMapList, fetchGetServerInfo } from '@/service/api';
 import { useSvgIcon } from '@/hooks/common/icon';
 import ThemeDrawer from '../../layouts/modules/theme-drawer/index.vue';
 import ServerCard from './modules/server-card.vue';
@@ -18,38 +17,34 @@ const themeStore = useThemeStore();
 
 const appStore = useAppStore();
 
-// 背景色
-const bgColor = computed(() => {
-  const COLOR_WHITE = '#ffffff';
-
-  const ratio = themeStore.darkMode ? 0.5 : 0.2;
-
-  return addColorAlpha(mixColor(COLOR_WHITE, themeStore.themeColor, ratio), 0.7);
-});
-
 // 服务器数据列表
-const serverData = ref([
+const serverData = ref<any[]>([
   {
     modelName: 'CS2-僵尸逃跑',
     serverList: [
       {
         address: 'cs1.zombieden.cn:27016',
+        serverAddress: '110.42.9.22:27016',
         serverData: null
       },
       {
         address: 'cs3.zombieden.cn:27015',
+        serverAddress: '110.42.9.181:27015',
         serverData: null
       },
       {
         address: 'cs3.zombieden.cn:27016',
+        serverAddress: '110.42.9.181:27016',
         serverData: null
       },
       {
         address: 'cs5.zombieden.cn:27015',
+        serverAddress: '110.42.9.149:27015',
         serverData: null
       },
       {
         address: 'cs5.zombieden.cn:27016',
+        serverAddress: '110.42.9.149:27016',
         serverData: null
       }
     ]
@@ -231,17 +226,18 @@ const initMap = async () => {
 
 // 初始化
 const init = async () => {
+  const hotList = await fetchGetHotList();
   // 用于收集所有获取服务器信息的异步操作Promise
   const allPromises: Promise<void>[] = [];
 
-  serverData.value.forEach(server => {
-    server.serverList.forEach(serverItem => {
+  serverData.value.forEach((server: any) => {
+    server.serverList.forEach((serverItem: any) => {
       // 为每个serverItem的信息获取操作创建Promise并添加到数组
       allPromises.push(
         (async () => {
           try {
             // 避免请求报错 导致网页渲染错误
-            const data = await fetchGetServerInfo({ address: serverItem.address });
+            const data: any = await fetchGetServerInfo({ address: serverItem.address });
             if (!data && !serverItem.serverData) {
               serverItem.serverData = null;
             } else {
@@ -253,6 +249,13 @@ const init = async () => {
                   data.tag = JSON.parse(map.tag);
                   data.type = String(map.type);
                 }
+              }
+              // 查找是否是热门服务器
+              const hotServer = hotList.data.list.find((item: any) => item.serverAddress === serverItem.serverAddress);
+              if (hotServer && hotServer.isHot) serverItem.isHost = true;
+
+              if (hotServer) {
+                serverItem.serverData.isHost = true;
               }
               serverItem.serverData = data;
             }
@@ -298,7 +301,7 @@ onUnmounted(() => {
       backgroundImage: `url(${themeStore?.baseBg})`
     }"
   >
-    <div class="server-header mt-20px flex p-10px" :style="{ backgroundColor: bgColor }">
+    <NCard class="server-header mt-20px" size="small" content-class="flex flex-wrap">
       <div class="server-header-left flex-y-center">
         <div class="server-header-logo mr-2px cursor-pointer" @click="goHref('https://zombieden.cn/')">
           <img src="@/assets/imgs/logo.png" />
@@ -335,7 +338,7 @@ onUnmounted(() => {
           />
         </div>
       </div>
-      <div class="server-header-right-mobile flex-y-center font-size-18px">
+      <div class="server-header-right-mobile flex-y-center font-size-22px">
         <div class="server-header-icon">
           <ThemeSchemaSwitch
             class="theme-config-icon mr-10px p-2px"
@@ -359,8 +362,8 @@ onUnmounted(() => {
           </NButton>
         </NDropdown>
       </div>
-    </div>
-    <div class="server-body mb-20px mt-20px p-10px" :style="{ backgroundColor: bgColor }">
+    </NCard>
+    <NCard class="server-body mb-20px mt-20px p-10px" size="small" content-class="flex-x-center flex-wrap">
       <NSpin :show="loading" class="min-h-800px">
         <div v-for="(server, index) in serverData" v-show="!loading" :key="index" class="servers mb-10px">
           <NText>{{ server.modelName }}</NText>
@@ -371,11 +374,13 @@ onUnmounted(() => {
           </NGrid>
         </div>
       </NSpin>
-    </div>
-    <div class="server-footer mb-20px p-5px" :style="{ backgroundColor: bgColor }">
-      <NText>Copyright © 2025 僵尸乐园 All Rights Reserved.</NText>
-      <NText class="cursor-pointer" @click="goHref('https://beian.miit.gov.cn/')">鄂ICP备18027986号-1</NText>
-    </div>
+    </NCard>
+    <NCard class="server-footer mb-20px p-5px" size="small" content-class="flex flex-wrap">
+      <NText class="w-full text-center">Copyright © 2025 僵尸乐园 All Rights Reserved.</NText>
+      <NText class="w-full cursor-pointer text-center" @click="goHref('https://beian.miit.gov.cn/')">
+        鄂ICP备18027986号-1
+      </NText>
+    </NCard>
     <ThemeDrawer />
   </div>
 </template>
@@ -389,9 +394,8 @@ onUnmounted(() => {
 
   .server-header {
     width: 90%;
-    height: 48px;
-    border-radius: 10px;
     display: flex;
+    opacity: 0.9;
 
     .server-header-left {
       width: 20%;
@@ -426,7 +430,7 @@ onUnmounted(() => {
 
   .server-body {
     width: 90%;
-    border-radius: 10px;
+    opacity: 0.9;
   }
 
   .server-footer {
@@ -435,7 +439,7 @@ onUnmounted(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    opacity: 0.9;
 
     .cursor-pointer {
       color: #0d6efd;

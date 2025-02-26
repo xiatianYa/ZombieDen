@@ -4,6 +4,7 @@ import { $t } from '@/locales';
 import DarkMode from './modules/dark-mode.vue';
 import ThemeColor from './modules/theme-color.vue';
 import BaseBg from './modules/base-bg.vue';
+import ConfigOperation from './modules/config-operation.vue';
 
 defineOptions({
   name: 'ThemeDrawer'
@@ -18,6 +19,9 @@ const appStore = useAppStore();
       <BaseBg />
       <DarkMode />
       <ThemeColor />
+      <template #footer>
+        <ConfigOperation />
+      </template>
     </NDrawerContent>
   </NDrawer>
 </template>

@@ -147,6 +147,7 @@ function handleInitModel() {
   } else {
     gameServer.value = { ...props.gameServerVo };
   }
+  console.log(gameServer.value);
 }
 
 // 计算进度颜色
@@ -281,6 +282,7 @@ onMounted(() => {});
         <NEllipsis :line-clamp="1">
           {{ gameServer?.HostName }}
         </NEllipsis>
+        <NTag v-if="gameServer?.isHost" size="small" round class="ml-5px" type="success">热门</NTag>
       </div>
       <div class="server-card-onLine flex-space-between ml-5px flex-y-center">
         <div class="flex-y-center">

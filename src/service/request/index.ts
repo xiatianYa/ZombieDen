@@ -186,3 +186,14 @@ export const baRequest = createRequest<App.Service.DemoResponse>(
     }
   }
 );
+
+export const wanmeiRequest = createRequest<App.Service.WanmeiResponse>(
+  {
+    baseURL: otherBaseURL.wanmei
+  },
+  {
+    async onRequest(config) {
+      return config;
+    }
+  }
+);
