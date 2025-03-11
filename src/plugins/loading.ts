@@ -55,6 +55,12 @@ export function setupLoading() {
                 stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
 
+        <!-- Letter E -->
+        <svg viewBox="0 0 44 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path pathLength="360" d="M2 10H30V16H10V21H25V27H10V32H30V38H2V10Z" class="dash gradient-c"
+                stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+
         <!-- Letter D -->
         <svg viewBox="0 0 44 54" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path pathLength="360"

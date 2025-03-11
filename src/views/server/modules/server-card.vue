@@ -147,7 +147,6 @@ function handleInitModel() {
   } else {
     gameServer.value = { ...props.gameServerVo };
   }
-  console.log(gameServer.value);
 }
 
 // 计算进度颜色
@@ -282,9 +281,14 @@ onMounted(() => {});
         <NEllipsis :line-clamp="1">
           {{ gameServer?.HostName }}
         </NEllipsis>
-        <NTag v-if="gameServer?.isHost" size="small" round class="ml-5px" type="success">热门</NTag>
+        <NTag v-if="gameServer?.isHot" size="small" round class="ml-5px" type="error">
+          <template #avatar>
+            <SvgIcon icon="solar:fire-outline" class="text-16px" />
+          </template>
+          热门
+        </NTag>
       </div>
-      <div class="server-card-onLine flex-space-between ml-5px flex-y-center">
+      <div class="server-card-onLine flex-space-between ml-5px mt-5px flex-y-center">
         <div class="flex-y-center">
           <SvgIcon icon="material-symbols:map-outline" class="mr-6px text-20px" />
           <NEllipsis :line-clamp="1">
@@ -397,6 +401,8 @@ onMounted(() => {});
     height: 100%;
 
     .server-card-name {
+      display: flex;
+      align-items: center;
       position: sticky;
       color: #ffffff;
       font-weight: bold;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import type { DropdownOption } from 'naive-ui';
+import axios from 'axios';
 import { useThemeStore } from '@/store/modules/theme';
 import { useAppStore } from '@/store/modules/app';
 import { fetchGetHotList, fetchGetMapList, fetchGetServerInfo } from '@/service/api';
@@ -18,153 +19,7 @@ const themeStore = useThemeStore();
 const appStore = useAppStore();
 
 // 服务器数据列表
-const serverData = ref<any[]>([
-  {
-    modelName: 'CS2-僵尸逃跑',
-    serverList: [
-      {
-        address: 'cs1.zombieden.cn:27016',
-        serverAddress: '110.42.9.22:27016',
-        serverData: null
-      },
-      {
-        address: 'cs3.zombieden.cn:27015',
-        serverAddress: '110.42.9.181:27015',
-        serverData: null
-      },
-      {
-        address: 'cs3.zombieden.cn:27016',
-        serverAddress: '110.42.9.181:27016',
-        serverData: null
-      },
-      {
-        address: 'cs5.zombieden.cn:27015',
-        serverAddress: '110.42.9.149:27015',
-        serverData: null
-      },
-      {
-        address: 'cs5.zombieden.cn:27016',
-        serverAddress: '110.42.9.149:27016',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS2-挂机大厅',
-    serverList: [
-      {
-        address: 'cs1.zombieden.cn:27015',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-僵尸逃跑',
-    serverList: [
-      {
-        address: 'cs2.zombieden.cn:27050',
-        serverData: null
-      },
-      {
-        address: 'cs2.zombieden.cn:27051',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-你画我猜',
-    serverList: [
-      {
-        address: 'cs2.zombieden.cn:27053',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-匪镇谍影',
-    serverList: [
-      {
-        address: 'cs6.zombieden.cn:27055',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-连跳',
-    serverList: [
-      {
-        address: 'cs3.zombieden.cn:27052',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-攀岩',
-    serverList: [
-      {
-        address: 'cs6.zombieden.cn:27103',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-闯关',
-    serverList: [
-      {
-        address: 'cs3.zombieden.cn:27053',
-        serverData: null
-      },
-      {
-        address: 'cs3.zombieden.cn:27054',
-        serverData: null
-      },
-      {
-        address: 'cs4.zombieden.cn:27055',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-娱乐对抗',
-    serverList: [
-      {
-        address: 'cs4.zombieden.cn:27052',
-        serverData: null
-      },
-      {
-        address: 'cs4.zombieden.cn:27053',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-混战',
-    serverList: [
-      {
-        address: 'cs4.zombieden.cn:27054',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-滑翔',
-    serverList: [
-      {
-        address: 'cs6.zombieden.cn:27203',
-        serverData: null
-      }
-    ]
-  },
-  {
-    modelName: 'CS-死亡奔跑',
-    serverList: [
-      {
-        address: 'cs2.zombieden.cn:27054',
-        serverData: null
-      }
-    ]
-  }
-]);
+const serverData = ref<any[]>([]);
 
 // 地图列表
 const mapData = ref();
@@ -224,6 +79,19 @@ const initMap = async () => {
   }
 };
 
+// 初始化服务器列表
+const initServers = async () => {
+  // 获取服务器列表
+  try {
+    // 使用axios获取JSON文件
+    const response = await axios.get('/config/servers.json');
+    // 将响应数据赋值给响应式变量
+    serverData.value = response.data;
+  } catch (error) {
+    window?.$message?.error(`获取服务器列表失败${error}`);
+  }
+};
+
 // 初始化
 const init = async () => {
   const hotList = await fetchGetHotList();
@@ -250,14 +118,16 @@ const init = async () => {
                   data.type = String(map.type);
                 }
               }
+
+              serverItem.serverData = data;
+
               // 查找是否是热门服务器
               const hotServer = hotList.data.list.find((item: any) => item.serverAddress === serverItem.serverAddress);
-              if (hotServer && hotServer.isHot) serverItem.isHost = true;
-
-              if (hotServer) {
-                serverItem.serverData.isHost = true;
+              if (hotServer && hotServer.isHot) {
+                serverItem.serverData.isHot = true;
+              } else {
+                serverItem.serverData.isHot = false;
               }
-              serverItem.serverData = data;
             }
           } catch (error) {
             // 捕获错误并进行处理，这里将 serverItem.serverData 设置为 null
@@ -285,6 +155,7 @@ const startTimer = () => {
 onMounted(async () => {
   // 初始化服务器数据
   await initMap();
+  await initServers();
   init();
   startTimer();
 });

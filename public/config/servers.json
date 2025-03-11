@@ -1,0 +1,162 @@
+[
+  {
+    "modelName": "CS2-僵尸逃跑",
+    "serverList": [
+      {
+        "address": "cs1.zombieden.cn:27016",
+        "serverAddress": "110.42.9.22:27016",
+        "serverData": null
+      },
+      {
+        "address": "cs3.zombieden.cn:27015",
+        "serverAddress": "110.42.9.181:27015",
+        "serverData": null
+      },
+      {
+        "address": "cs3.zombieden.cn:27016",
+        "serverAddress": "110.42.9.181:27016",
+        "serverData": null
+      },
+      {
+        "address": "cs5.zombieden.cn:27015",
+        "serverAddress": "110.42.9.149:27015",
+        "serverData": null
+      },
+      {
+        "address": "cs5.zombieden.cn:27016",
+        "serverAddress": "110.42.9.149:27016",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS2-娱乐混战",
+    "serverList": [
+      {
+        "address": "cs6.zombieden.cn:27089",
+        "serverAddress": "110.42.9.150:27089",
+        "serverData": null
+      },
+      {
+        "address": "cs6.zombieden.cn:27090",
+        "serverAddress": "110.42.9.150:27090",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS2-挂机大厅",
+    "serverList": [
+      {
+        "address": "cs1.zombieden.cn:27015",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-僵尸逃跑",
+    "serverList": [
+      {
+        "address": "cs2.zombieden.cn:27050",
+        "serverData": null
+      },
+      {
+        "address": "cs2.zombieden.cn:27051",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-你画我猜",
+    "serverList": [
+      {
+        "address": "cs2.zombieden.cn:27053",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-匪镇谍影",
+    "serverList": [
+      {
+        "address": "cs6.zombieden.cn:27055",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-连跳",
+    "serverList": [
+      {
+        "address": "cs3.zombieden.cn:27052",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-攀岩",
+    "serverList": [
+      {
+        "address": "cs6.zombieden.cn:27103",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-闯关",
+    "serverList": [
+      {
+        "address": "cs3.zombieden.cn:27053",
+        "serverData": null
+      },
+      {
+        "address": "cs3.zombieden.cn:27054",
+        "serverData": null
+      },
+      {
+        "address": "cs4.zombieden.cn:27055",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-娱乐对抗",
+    "serverList": [
+      {
+        "address": "cs4.zombieden.cn:27052",
+        "serverData": null
+      },
+      {
+        "address": "cs4.zombieden.cn:27053",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-混战",
+    "serverList": [
+      {
+        "address": "cs4.zombieden.cn:27054",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-滑翔",
+    "serverList": [
+      {
+        "address": "cs6.zombieden.cn:27203",
+        "serverData": null
+      }
+    ]
+  },
+  {
+    "modelName": "CS-死亡奔跑",
+    "serverList": [
+      {
+        "address": "cs2.zombieden.cn:27054",
+        "serverData": null
+      }
+    ]
+  }
+]
