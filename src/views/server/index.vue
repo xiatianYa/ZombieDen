@@ -149,7 +149,7 @@ const startTimer = () => {
   // 开启定时任务 轮询服务器数据
   timer.value = setInterval(() => {
     init();
-  }, 20000);
+  }, 60000);
 };
 
 onMounted(async () => {
